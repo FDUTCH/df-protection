@@ -17,7 +17,7 @@ var (
 // Monitoring stores execution time.
 type Monitoring struct {
 	timeSpent time.Duration
-	calls     *list.List // Хранит все вызовы в порядке от новых к старым
+	calls     *list.List
 }
 
 // callRecord is the record of the execution time of the handler call.
