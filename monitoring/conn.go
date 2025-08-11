@@ -22,3 +22,8 @@ func (c connection) Close() error {
 	deletePlayer(c.uuid)
 	return c.Conn.Close()
 }
+
+// Unwrap returns original session.Conn.
+func (c connection) Unwrap() session.Conn {
+	return c.Conn
+}
