@@ -4,7 +4,7 @@ Is the utility library utility for Dragonfly that improves stability, protects a
 adds several useful utilities.
 
 - [x] Recovery
-- [x] Overload protection.
+- [x] Antilag protection.
 - [ ] PPS Limit
 - [ ] Protection against malicious packets
 
