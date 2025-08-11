@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/df-mc/dragonfly/server/player"
+	"github.com/df-mc/dragonfly/server/world"
 	"github.com/google/uuid"
 )
 
@@ -18,6 +19,8 @@ var (
 type Monitoring struct {
 	timeSpent time.Duration
 	calls     *list.List
+
+	previousWorld *world.World
 }
 
 // callRecord is the record of the execution time of the handler call.
@@ -36,11 +39,6 @@ func newMonitoring() *Monitoring {
 // ExecutionTimeForLastSecond returns the processor time spent processing player packets over the last second.
 func (m *Monitoring) ExecutionTimeForLastSecond() time.Duration {
 	return m.executionTimeSince(time.Second)
-}
-
-// ExecutionTimeForLastMinute returns the processor time spent processing player packets over the last minute.
-func (m *Monitoring) ExecutionTimeForLastMinute() time.Duration {
-	return m.executionTimeSince(time.Minute)
 }
 
 // executionTimeSince returns the processor time spent processing player packets over a specified period of time.
@@ -75,7 +73,7 @@ func (m *Monitoring) writeExecutionTime(start, end time.Time) {
 
 // gc clears all outdated records.
 func (m *Monitoring) gc() {
-	cutoff := time.Now().Add(-time.Minute)
+	cutoff := time.Now().Add(-time.Second)
 	for {
 		last := m.calls.Back()
 		if last == nil {
@@ -97,8 +95,10 @@ func (m *Monitoring) hook(h packetHandler) packetHandler {
 // deletePlayer deletes player from the internal map.
 func deletePlayer(uuid uuid.UUID) {
 	mu.Lock()
+	previousWorld := monitorings[uuid].previousWorld
 	delete(monitorings, uuid)
 	mu.Unlock()
+	addToWorld(previousWorld, -1)
 }
 
 // GetMonitoring returns player's Monitoring.

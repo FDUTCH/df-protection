@@ -34,5 +34,13 @@ func (h *hook) Handle(p packet.Packet, s *session.Session, tx *world.Tx, c sessi
 	end := time.Now()
 
 	h.m.writeExecutionTime(start, end)
+
+	if Config.PreventLags && time.Second/time.Duration(h.m.updateWorld(tx.World())) < h.m.ExecutionTimeForLastSecond() {
+		if Config.PerformanceReporter != nil {
+			Config.PerformanceReporter(s, c)
+		} else {
+			s.Disconnect(fmt.Sprintf("disconnected due to server performance issues"))
+		}
+	}
 	return err
 }
