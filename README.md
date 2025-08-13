@@ -20,7 +20,8 @@ monitoring.Config.PerformanceReporter = func(s *session.Session, c session.Contr
 
 // customize your Recovery 
 monitoring.Config.Recovery = func(s *session.Session, c session.Controllable, err error) {
-	// your recovery
+	// printing panic message
+	fmt.Println(util.PanicMessage(err))
 }
 
 for p := range srv.Accept() {
