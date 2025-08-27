@@ -60,8 +60,8 @@ func (m *Monitoring) ExecutionTime() time.Duration {
 	return m.timeSpent
 }
 
-// writeExecutionTime writes callRecord into Monitoring.
-func (m *Monitoring) writeExecutionTime(start, end time.Time) {
+// WriteExecutionTime writes callRecord into Monitoring.
+func (m *Monitoring) WriteExecutionTime(start, end time.Time) {
 	duration := end.Sub(start)
 	m.timeSpent += duration
 	m.calls.PushFront(callRecord{

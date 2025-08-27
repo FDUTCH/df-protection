@@ -34,7 +34,7 @@ func (h *hook) Handle(p packet.Packet, s *session.Session, tx *world.Tx, c sessi
 	err := h.original.Handle(p, s, tx, c)
 	end := time.Now()
 
-	h.m.writeExecutionTime(start, end)
+	h.m.WriteExecutionTime(start, end)
 
 	if Config.PreventLags && time.Second/time.Duration(h.m.updateWorld(tx.World())) < h.m.ExecutionTimeForLastSecond() {
 		if Config.PerformanceReporter != nil {
