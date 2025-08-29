@@ -19,8 +19,8 @@ type hook struct {
 // Handle ...
 func (h *hook) Handle(p packet.Packet, s *session.Session, tx *world.Tx, c session.Controllable) error {
 	defer func() {
-		err := recover()
-		if err != nil {
+		if e := recover(); e != nil {
+			err := makeError(e)
 			if Config.Recovery != nil {
 				Config.Recovery(s, p, c.(*player.Player), err.(error))
 			} else {
@@ -44,4 +44,13 @@ func (h *hook) Handle(p packet.Packet, s *session.Session, tx *world.Tx, c sessi
 		}
 	}
 	return err
+}
+
+func makeError(e any) error {
+	switch t := e.(type) {
+	case error:
+		return t
+	default:
+		return fmt.Errorf("error: %v", e)
+	}
 }
