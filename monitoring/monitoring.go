@@ -98,7 +98,7 @@ func deletePlayer(uuid uuid.UUID) {
 	previousWorld := monitorings[uuid].previousWorld
 	delete(monitorings, uuid)
 	mu.Unlock()
-	addToWorld(previousWorld, -1)
+	deleteFromWorld(previousWorld, uuid)
 }
 
 // GetMonitoring returns player's Monitoring.

@@ -15,5 +15,5 @@ var Config struct {
 	PreventLags bool
 	// PerformanceReporter reports players that are causing lags,
 	// if not specified player will be disconnected.
-	PerformanceReporter func(s *session.Session, p *player.Player)
+	PerformanceReporter func(s *session.Session, p *player.Player, pk packet.Packet)
 }
